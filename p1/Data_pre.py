@@ -136,7 +136,7 @@ def plot_marker(marker_df, smooth_type="savgol"):
 # ---------- Step 4: 主函数 ----------
 def main():
     # 替换为你自己的路径
-    path = "D:/Work_Code/math_latex/25数模/法医物证多人身份鉴定问题数据集/附件1：不同人数的STR图谱数据.xlsx"
+    path = "MathModel_Code/data/origin/xlsx/附件1：不同人数的STR图谱数据.xlsx"
     df = pd.read_excel(path)
     df_long = melt_alleles(df)
 
@@ -146,7 +146,7 @@ def main():
     #    plot_marker(marker_df, smooth_type="wavelet")  # "min", "savgol", or "wavelet"
     #Preliminary_processing(df_long)
 
-    df_long.to_csv("预处理文件.csv", index=False, encoding='utf-8')
+    df_long.to_csv("MathModel_Code/data/preprocess/预处理文件.csv", index=False, encoding='utf-8')
 
 if __name__ == "__main__":
     main()

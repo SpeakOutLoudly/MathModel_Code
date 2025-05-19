@@ -165,7 +165,7 @@ def wavelet_denoise(signal, wavelet='db4', level=2):
 # ---------- 示例主函数 ----------
 def main():
     # 1) 数据读取 & melt
-    path = "D:/Work_Code/math_latex/25数模/法医物证多人身份鉴定问题数据集/附件1：不同人数的STR图谱数据.xlsx"
+    path = "MathModel_Code/data/origin/xlsx/附件1：不同人数的STR图谱数据.xlsx"
     df_raw = pd.read_excel(path)
     df_long = Data_pre.melt_alleles(df_raw)          # 你的函数
     # df_long["Height"] = savgol_smooth(df_long["Height"].values)
@@ -181,7 +181,7 @@ def main():
     result_df["count"] = result_df["SampleFile"].apply(Data_pre.count_numbers_in_range)
     print(result_df.head())
 
-    out_path = "贡献者人数估计结果.csv"
+    out_path = "MathModel_Code/p1/result/贡献者人数估计结果.csv"
     result_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     accuracy_rate(result_df)
     print(f"已保存结果至 {out_path}")
