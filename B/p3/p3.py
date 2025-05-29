@@ -9,8 +9,6 @@ plt.rcParams['axes.unicode_minus'] = False
 
 class LEDColorCorrection:
     """
-    LED显示器颜色校正类 - 精简版本
-    
     基于三基色原理和CIE Lab色彩空间的颜色校正
     使用差分进化算法优化校正矩阵
     """
@@ -151,14 +149,14 @@ class LEDColorCorrection:
         for i, channel in enumerate(['R', 'G', 'B']):
             meas = self.measured_data[..., i].flatten() / 255.0
             targ = self.target_data[..., i].flatten() / 255.0
-            mask = (targ > 0.04) & (targ < 0.96) & (meas > 0)
+            mask = (targ >= 0) & (targ <= 1)
             m = meas[mask]
             t = targ[mask]
             if len(m) > 0:
                 # 拟合 log(m) = gamma * log(t) + offset
                 A = np.vstack([np.log(t + 1e-8), np.ones_like(t)]).T
                 gamma, offset = np.linalg.lstsq(A, np.log(m + 1e-8), rcond=None)[0]
-                gamma = float(np.clip(gamma, 0.1, 3.0))
+                gamma = float(np.clip(gamma, 0.0, 3.0))
                 scale = float(np.exp(offset))
             else:
                 gamma, scale = 1.0, 1.0
@@ -222,7 +220,6 @@ class LEDColorCorrection:
         if det <= 0 or abs(det) < 0.1:
             loss += 1000.0
         return loss
-
     
     def calibrate_correction_matrix(self):
         print("开始校正：矩阵 + 偏置...")
@@ -252,7 +249,6 @@ class LEDColorCorrection:
         print("偏置：", b_opt)
         return M_opt, b_opt
 
-    
     def apply_correction(self, input_rgb):
         """应用带偏置的线性校正"""
         lin = self.apply_gamma_correction(input_rgb.astype(np.float32), inverse=True)/255.0
@@ -340,7 +336,7 @@ class LEDColorCorrection:
 
 # 主函数
 if __name__ == "__main__":
-    files = ["MathModel_Code\B\data\R.xlsx", "MathModel_Code\B\data\G.xlsx", "MathModel_Code\B\data\B.xlsx"]
+    files = ["MathModel_Code\\data\\preprocess\\RedPicture.xlsx", "MathModel_Code\\data\\preprocess\\GreenPicture.xlsx", "MathModel_Code\\data\\preprocess\\BluePicture.xlsx"]
     
     corrector = LEDColorCorrection()
     
